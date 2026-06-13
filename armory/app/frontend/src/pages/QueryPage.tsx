@@ -9,7 +9,7 @@ import { getVerdictStatus, formatExpiry, truncateAddress } from "../utils/verdic
 import styled, { keyframes } from 'styled-components';
 import { CyberInput, PremiumButton, techGlow } from '../styles/shared';
 
-const PROGRAM_ID = new PublicKey("G8ZmDRtcCyvWCGRj41xoenQVQ7uRDEe1hVZzzqUYsgpX");
+const PROGRAM_ID = new PublicKey("VRPxpqkBTXgi1DaQ1t1yVyhD8PSCw6uBDrQx1zZznUk");
 const IDL = require("../idl/armory_protocol.json");
 
 const fadeIn = keyframes`

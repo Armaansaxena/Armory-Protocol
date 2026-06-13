@@ -36,38 +36,35 @@ export async function fetchWellKnown(
       
       if (!response.ok) continue;
       
-      const data = await response.json();
-      
-      if (!data["solana-address"]) {
-        return {
-          found: true,
-          pubkey: null,
-          entityName: data["solana-entity-name"] || null,
-          error: "File found but missing solana-address field",
-          proxyUsed: i
-        };
+      // Check if response is actually JSON before parsing
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+          // If it's a proxy that wraps the response, it might still be JSON
+          // but if it's an HTML error page, we should skip it
+          const text = await response.text();
+          if (text.trim().startsWith("<!DOCTYPE html>")) continue;
+          
+          try {
+              const data = JSON.parse(text);
+              return validateData(data, i);
+          } catch(e) {
+              continue;
+          }
       }
-      
-      return {
-        found: true,
-        pubkey: data["solana-address"],
-        entityName: data["solana-entity-name"] || null,
-        error: null,
-        proxyUsed: i
-      };
+
+      const data = await response.json();
+      return validateData(data, i);
       
     } catch (err: any) {
       if (i === PROXIES.length - 1) {
-        // All proxies failed
         return {
           found: false,
           pubkey: null,
           entityName: null,
-          error: "Could not reach domain. Check URL or try later.",
+          error: "Browser security (CORS) is blocking direct access. Please proceed to registration; the Armory Oracle will handle the verification.",
           proxyUsed: -1
         };
       }
-      // Try next proxy
       continue;
     }
   }
@@ -79,4 +76,24 @@ export async function fetchWellKnown(
     error: "Verification unavailable",
     proxyUsed: -1
   };
+}
+
+function validateData(data: any, proxyIndex: number): WellKnownResult {
+    if (!data["solana-address"]) {
+        return {
+          found: true,
+          pubkey: null,
+          entityName: data["solana-entity-name"] || null,
+          error: "File found but missing solana-address field",
+          proxyUsed: proxyIndex
+        };
+    }
+    
+    return {
+        found: true,
+        pubkey: data["solana-address"],
+        entityName: data["solana-entity-name"] || null,
+        error: null,
+        proxyUsed: proxyIndex
+    };
 }
