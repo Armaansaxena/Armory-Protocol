@@ -1,0 +1,168 @@
+Build a beautiful, complete Next.js 14 UI for a product 
+called "Armory Protocol" — a Solana address verification 
+service. Think of it like PhonePe's verified merchant 
+badge, but for Web3 wallets.
+
+This is UI ONLY. No blockchain logic. No real API calls.
+Use mock/hardcoded data for all dynamic content.
+The blockchain integration will be added separately.
+
+Design inspiration: pay.sh, agentcash.dev, switchboard.xyz
+These sites are dark, minimal, serious infrastructure 
+products. Study them. Match that energy.
+
+═══════════════════════════════════════════════════════
+DESIGN SYSTEM
+═══════════════════════════════════════════════════════
+
+Colors (add to tailwind.config.js):
+  background: "#05080F"   ← main bg, near-black
+  surface:    "#0A0F1A"   ← cards
+  border:     "#1A2A3A"   ← borders
+  teal:       "#00A896"   ← primary accent (use sparingly)
+  teal-dim:   "#007A6E"   ← hover states
+  primary:    "#F0F4F8"   ← main text
+  secondary:  "#94A3B8"   ← description text
+  dim:        "#475569"   ← labels, metadata
+  success:    "#10B981"   ← verified green
+  warning:    "#F59E0B"   ← unverified amber
+  danger:     "#EF4444"   ← expired/error red
+
+Typography:
+  Font: Inter (import from Google Fonts)
+  Mono: JetBrains Mono (for addresses/code)
+  
+Global:
+  body: bg-background text-primary
+  Smooth scroll behavior
+  Custom scrollbar: thin, teal thumb, dark track
+
+Spacing philosophy: generous whitespace.
+Sections need room to breathe.
+
+Border radius: 
+  Cards: rounded-xl (12px)
+  Inputs: rounded-lg (8px)  
+  Badges: rounded-full
+  Buttons: rounded-lg
+
+Shadows: ONLY this one, used sparingly:
+  box-shadow: 0 0 40px rgba(0, 168, 150, 0.06)
+  (subtle teal glow on hero card)
+
+Rules:
+  NO glassmorphism
+  NO blur effects
+  NO heavy gradients (max: subtle 2-stop dark gradient 
+    for hero section bg only)
+  NO stock photos
+  YES: clean borders, whitespace, mono text, 
+       solid teal used as accent only
+
+═══════════════════════════════════════════════════════
+PAGES TO BUILD
+═══════════════════════════════════════════════════════
+
+1. Landing page        /           (marketing)
+2. App page            /app        (main product)
+3. Register page       /register   (merchant dashboard)
+
+═══════════════════════════════════════════════════════
+SHARED: NAVBAR
+═══════════════════════════════════════════════════════
+
+Fixed top, height 56px.
+Background: bg-background/95 with backdrop-blur-sm
+Border bottom: border-border
+
+Left:
+  Shield emoji 🛡 + 
+  "ARMORY" (text-teal font-bold tracking-wide text-sm) +
+  "PROTOCOL" (text-dim text-xs tracking-widest ml-1)
+  Wrapped in a link to /
+
+Center (hidden on mobile):
+  Three nav links:
+  "How It Works"  →  /#how-it-works
+  "For Merchants" →  /#merchants
+  "For Agents"    →  /#agents
+  Style: text-secondary text-sm hover:text-primary 
+         transition-colors
+
+Right:
+  "GitHub" (text-secondary text-sm hover:text-teal)
+  
+  "Sign In" button:
+    border border-teal/50 text-teal text-sm
+    px-4 py-1.5 rounded-lg
+    hover:bg-teal/10 hover:border-teal transition
+    
+  When logged in (show this state as default in /app):
+    Small circle avatar (bg-teal/20 border border-teal)
+    with first letter of "A" (for Armaan)
+    + "Arm...aan" truncated address text
+    + small dropdown chevron
+
+Mobile: hamburger (☰) icon, slide-in drawer
+
+═══════════════════════════════════════════════════════
+PAGE 1: LANDING PAGE  /
+═══════════════════════════════════════════════════════
+
+── HERO ──────────────────────────────────────────────
+
+min-h-screen, flex items-center justify-center
+Subtle radial gradient bg: 
+  radial-gradient(ellipse at top, 
+    rgba(0,168,150,0.04) 0%, transparent 70%)
+
+Content: max-w-3xl mx-auto text-center px-4
+
+Eyebrow pill:
+  Small pill badge above headline:
+  bg-teal/10 border border-teal/20 
+  text-teal text-xs px-3 py-1 rounded-full
+  Text: "🛡 BUILT ON SOLANA · TURBIN3 Q2 2026"
+
+Main headline (most important element on page):
+  text-5xl md:text-7xl font-bold text-primary
+  leading-tight tracking-tight
+  "Who owns this wallet?"
+
+Subheadline:
+  text-lg md:text-xl text-secondary leading-relaxed
+  max-w-2xl mx-auto mt-6
+  "Paste any Solana address and instantly see the 
+   verified merchant behind it — before you send 
+   a single rupee."
+
+CTA buttons (mt-10, flex gap-4 justify-center):
+
+  Primary button:
+    bg-teal hover:bg-teal-dim text-background
+    font-semibold px-8 py-3 rounded-lg
+    transition-colors text-sm
+    "Try Armory →"
+    href="/app"
+
+  Secondary button:
+    border border-border hover:border-teal/50
+    text-secondary hover:text-primary
+    px-8 py-3 rounded-lg transition text-sm
+    "Register Your Domain"
+    href="/register"
+
+Micro text (mt-6):
+  text-xs text-dim text-center
+  "Free to query · Solana Devnet · sRFC-35 Standard"
+
+Scroll indicator (bottom of hero):
+  Animated chevron pointing down
+  text-dim, subtle bounce animation
+
+── DEMO STRIP ────────────────────────────────────────
+
+Section directly below hero. py-12.
+bg-surface border-y border-border
+
+Conten

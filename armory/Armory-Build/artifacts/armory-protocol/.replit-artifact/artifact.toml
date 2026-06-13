@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Armory Protocol"
+version = "1.0.0"
+id = "artifacts/armory-protocol"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23773
+
+[services.development]
+run = "pnpm --filter @workspace/armory-protocol run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/armory-protocol", "run", "build" ]
+publicDir = "artifacts/armory-protocol/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23773"
+BASE_PATH = "/"

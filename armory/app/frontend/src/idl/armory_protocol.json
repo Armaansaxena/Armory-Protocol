@@ -1,0 +1,594 @@
+{
+  "address": "G8ZmDRtcCyvWCGRj41xoenQVQ7uRDEe1hVZzzqUYsgpX",
+  "metadata": {
+    "name": "armory_protocol",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Armory Protocol"
+  },
+  "instructions": [
+    {
+      "name": "expire_entity",
+      "discriminator": [
+        243,
+        65,
+        58,
+        215,
+        196,
+        77,
+        65,
+        92
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "entity_record",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "domain",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "initialize_config",
+      "discriminator": [
+        208,
+        127,
+        21,
+        1,
+        194,
+        190,
+        196,
+        70
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "verifier",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "query_entity",
+      "discriminator": [
+        235,
+        86,
+        79,
+        205,
+        43,
+        40,
+        9,
+        214
+      ],
+      "accounts": [
+        {
+          "name": "entity_record"
+        }
+      ],
+      "args": [
+        {
+          "name": "domain",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "register_entity",
+      "discriminator": [
+        166,
+        52,
+        122,
+        244,
+        214,
+        116,
+        215,
+        255
+      ],
+      "accounts": [
+        {
+          "name": "entity_authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "entity_record",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "domain",
+          "type": "string"
+        },
+        {
+          "name": "official_pubkey",
+          "type": "pubkey"
+        },
+        {
+          "name": "entity_name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "revoke_entity",
+      "discriminator": [
+        184,
+        110,
+        140,
+        250,
+        157,
+        169,
+        179,
+        215
+      ],
+      "accounts": [
+        {
+          "name": "verifier_authority",
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "entity_record",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "domain",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "update_verifier",
+      "discriminator": [
+        198,
+        42,
+        44,
+        241,
+        47,
+        104,
+        225,
+        255
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "new_verifier",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "verify_entity",
+      "discriminator": [
+        225,
+        26,
+        41,
+        133,
+        84,
+        219,
+        130,
+        102
+      ],
+      "accounts": [
+        {
+          "name": "verifier_authority",
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "entity_record",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "domain",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "EntityRecord",
+      "discriminator": [
+        41,
+        136,
+        163,
+        81,
+        5,
+        100,
+        78,
+        143
+      ]
+    },
+    {
+      "name": "RegistryConfig",
+      "discriminator": [
+        23,
+        118,
+        10,
+        246,
+        173,
+        231,
+        243,
+        156
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "EntityExpired",
+      "discriminator": [
+        14,
+        151,
+        53,
+        69,
+        41,
+        234,
+        213,
+        78
+      ]
+    },
+    {
+      "name": "EntityRegistered",
+      "discriminator": [
+        207,
+        100,
+        27,
+        194,
+        243,
+        88,
+        104,
+        198
+      ]
+    },
+    {
+      "name": "EntityRevoked",
+      "discriminator": [
+        187,
+        114,
+        155,
+        129,
+        23,
+        149,
+        248,
+        187
+      ]
+    },
+    {
+      "name": "EntityVerified",
+      "discriminator": [
+        224,
+        160,
+        230,
+        92,
+        0,
+        236,
+        192,
+        70
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "EntityAlreadyRegistered",
+      "msg": "An entity record for this domain already exists"
+    },
+    {
+      "code": 6001,
+      "name": "UnauthorizedVerifier",
+      "msg": "Unauthorized: signer is not the registered verifier"
+    },
+    {
+      "code": 6002,
+      "name": "AlreadyVerified",
+      "msg": "This entity record is already verified"
+    },
+    {
+      "code": 6003,
+      "name": "ExpireNotReady",
+      "msg": "Expiration epoch has not yet passed"
+    },
+    {
+      "code": 6004,
+      "name": "DomainTooLong",
+      "msg": "Domain string exceeds maximum length of 64 characters"
+    },
+    {
+      "code": 6005,
+      "name": "EntityNameTooLong",
+      "msg": "Entity name exceeds maximum length of 100 characters"
+    },
+    {
+      "code": 6006,
+      "name": "UnauthorizedAdmin",
+      "msg": "Unauthorized: signer is not the admin"
+    },
+    {
+      "code": 6007,
+      "name": "InvalidState",
+      "msg": "Invalid state for this operation"
+    }
+  ],
+  "types": [
+    {
+      "name": "EntityExpired",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "domain",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EntityRecord",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "domain_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "official_pubkey",
+            "type": "pubkey"
+          },
+          {
+            "name": "verification_status",
+            "type": "bool"
+          },
+          {
+            "name": "expiration_epoch",
+            "type": "i64"
+          },
+          {
+            "name": "registered_at",
+            "type": "i64"
+          },
+          {
+            "name": "verified_at",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "verifier",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "entity_name",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EntityRegistered",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "official_pubkey",
+            "type": "pubkey"
+          },
+          {
+            "name": "registered_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EntityRevoked",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "domain",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EntityVerified",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "official_pubkey",
+            "type": "pubkey"
+          },
+          {
+            "name": "expiration_epoch",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RegistryConfig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "verifier",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_entities",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ],
+  "constants": [
+    {
+      "name": "CONFIG_SEED",
+      "type": "bytes",
+      "value": "[99, 111, 110, 102, 105, 103]"
+    },
+    {
+      "name": "ENTITY_SEED",
+      "type": "bytes",
+      "value": "[101, 110, 116, 105, 116, 121]"
+    }
+  ]
+}

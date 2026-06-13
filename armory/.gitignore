@@ -1,0 +1,12 @@
+.anchor
+.DS_Store
+target
+**/*.rs.bk
+node_modules
+test-ledger
+.yarn
+.surfpool
+.env
+*.keypair.json
+program_id.json
+!programs/**/src/program_id.json

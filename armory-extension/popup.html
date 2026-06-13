@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Armory Protocol</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 320px; background: #05080F; color: #F0F4F8; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 13px; }
+    .header { padding: 16px; border-bottom: 1px solid #1A2A3A; display: flex; align-items: center; gap: 10px; }
+    .brand { font-size: 14px; font-weight: 700; color: #00A896; letter-spacing: 0.1em; }
+    
+    .manual-check { padding: 16px; border-bottom: 1px solid #1A2A3A; background: #0A0F1A; }
+    .check-title { font-size: 10px; color: #475569; text-transform: uppercase; margin-bottom: 8px; font-weight: 700; }
+    .input-row { display: flex; gap: 8px; }
+    input { flex: 1; background: #05080F; border: 1px solid #1A2A3A; border-radius: 6px; padding: 8px; color: #FFFFFF; font-size: 11px; font-family: monospace; outline: none; }
+    input:focus { border-color: #00A896; }
+    
+    .result-area { margin-top: 12px; display: none; padding: 10px; border-radius: 8px; font-size: 12px; }
+    .result-area.v { display: block; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); color: #10B981; }
+    .result-area.u { display: block; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); color: #F59E0B; }
+    
+    .section { padding: 12px 16px; border-bottom: 1px solid #1A2A3A; }
+    .section-title { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+    
+    .launch-btn { display: block; margin: 12px 16px; padding: 10px; background: #00A896; color: #05080F; font-weight: 700; font-size: 13px; text-align: center; text-decoration: none; border-radius: 8px; cursor: pointer; transition: 0.15s; }
+    .launch-btn:hover { background: #007A6E; }
+    
+    .footer { padding: 10px 16px; text-align: center; color: #2D3748; font-size: 10px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span style="font-size:20px">🛡</span>
+    <span class="brand">ARMORY PROTOCOL</span>
+  </div>
+  
+  <div class="manual-check">
+    <div class="check-title">Verify Address Manually</div>
+    <div class="input-row">
+      <input type="text" id="manual-addr" placeholder="Paste Solana address...">
+    </div>
+    <div id="result" class="result-area"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Network Status</div>
+    <div style="display:flex; justify-content:space-between; font-size:11px">
+      <span style="color:#64748B">Solana Devnet</span>
+      <span style="color:#10B981">● Online</span>
+    </div>
+  </div>
+  
+  <a class="launch-btn" href="http://localhost:3000" target="_blank" id="launch-app">
+    Open Dashboard →
+  </a>
+  
+  <a class="launch-btn" href="http://localhost:3000/demo/wallet" target="_blank" style="background:#1A1F26; color:#8B949E; margin-top:0">
+    Open Wallet Simulator →
+  </a>
+
+  <div class="footer">Turbin3 Capstone Q2 2026</div>
+  
+  <script src="armory.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

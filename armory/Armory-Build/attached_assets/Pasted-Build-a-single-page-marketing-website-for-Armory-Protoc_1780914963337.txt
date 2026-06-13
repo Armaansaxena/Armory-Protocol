@@ -1,0 +1,466 @@
+Build a single-page marketing website for "Armory Protocol" 
+— a Solana blockchain project. This is a standalone 
+marketing/landing page. It is NOT the app itself.
+
+The app already exists separately. This website explains 
+what Armory does, shows a live demo widget, and drives 
+people to the app or the GitHub.
+
+Design inspiration: pay.sh, agentcash.dev, switchboard.xyz
+These are dark, minimal, infrastructure-product websites.
+Study their energy — serious, technical, no fluff.
+
+═══════════════════════════════════════════════════════════
+DESIGN SYSTEM
+═══════════════════════════════════════════════════════════
+
+Colors:
+  Background:    #05080F  (near-black, slightly blue-tinted)
+  Surface:       #0A0F1A  (cards and sections)
+  Border:        #1A2A3A  (subtle borders)
+  Primary:       #00A896  (teal — the ONLY accent color)
+  Primary dim:   #00786C  (teal hover states)
+  Text primary:  #F0F4F8  (near-white)
+  Text secondary:#94A3B8  (gray — descriptions)
+  Text dim:      #475569  (labels, metadata)
+  Success:       #10B981  (verified green)
+  Warning:       #F59E0B  (unverified amber)
+  Danger:        #EF4444  (expired red)
+
+Typography:
+  Font: system-ui, -apple-system, "Segoe UI", sans-serif
+  Monospace: "JetBrains Mono", "Fira Code", Consolas, monospace
+  NO external font imports — keep it fast
+
+Spacing: generous. Sections need breathing room.
+Border radius: 12px cards, 8px inputs, 6px badges
+No shadows except: 0 0 40px rgba(0, 168, 150, 0.08) 
+  on hero elements — subtle teal glow only
+
+NO: gradients, glassmorphism, blur, animations 
+    except subtle fade-in on scroll
+YES: clean borders, whitespace, monospace text, 
+     solid teal accent used sparingly
+
+═══════════════════════════════════════════════════════════
+PAGE STRUCTURE — 8 SECTIONS IN ORDER
+═══════════════════════════════════════════════════════════
+
+── SECTION 1: NAV ──────────────────────────────────────
+
+Fixed top navigation. Dark background with bottom border.
+Height: 56px
+
+Left: 
+  Logo — shield icon (🛡) + "ARMORY" in teal bold 14px 
+         + "PROTOCOL" in gray 11px tracking-wider
+
+Center (desktop only):
+  Three links: "How It Works"  "For Merchants"  "For Agents"
+  Gray, 13px, hover → teal
+
+Right:
+  "GitHub" link → github.com/Armaansaxena (gray, 13px)
+  "Launch App →" button → teal background, white text, 
+    12px, border-radius 6px, padding 8px 16px
+
+Mobile: hamburger menu, links stack vertically
+
+── SECTION 2: HERO ─────────────────────────────────────
+
+Full viewport height. Centered content. max-width 680px.
+
+Eyebrow text (small, teal, tracking-widest, uppercase):
+  "BUILT ON SOLANA · TURBIN3 Q2 2026"
+
+Main headline (48px desktop, 32px mobile, bold, white):
+  "Who owns this wallet?"
+
+Subheadline (20px, gray, line-height 1.6):
+  "Paste any Solana address and instantly see the 
+   verified business behind it — before you send a 
+   single rupee."
+
+Two CTA buttons (side by side):
+  Primary: "Check an Address →"  teal bg, white text
+  Secondary: "Register Your Domain"  teal border, 
+             teal text, transparent bg
+
+Below buttons: small gray text:
+  "Free to query · Built on Solana · sRFC-35 standard"
+
+── SECTION 3: LIVE DEMO WIDGET ─────────────────────────
+
+This is the most important section. It must work.
+
+Section label: "TRY IT NOW" (small, teal, tracking-wider)
+Section heading: "See it in action"
+
+A dark card (background #0A0F1A, border 1px solid #1A2A3A,
+border-radius 12px, padding 32px) containing:
+
+INPUT ROW:
+  Text input (full width, height 48px):
+    placeholder: "Paste a Solana wallet address or domain..."
+    background: #05080F
+    border: 1px solid #1A2A3A
+    border-radius: 8px
+    font: monospace, 13px
+    focus border: #00A896
+  
+  "Check" button (teal, right side of input)
+
+THREE EXAMPLE PILLS below input (clickable):
+  [demo.armory.dev]  [testmerchant.in]  [solpay.demo]
+  Clicking any pill fills the input AND auto-runs the check
+  Style: dark bg, teal border, teal text, 11px, border-radius 20px
+
+RESULT AREA (shown after check):
+
+  VERIFIED result card:
+  ┌──────────────────────────────────────────────────┐
+  │  ✅  VERIFIED MERCHANT                           │
+  │                                                  │
+  │  Armory Protocol Demo                            │  ← entity_name, 18px bold white
+  │  demo.armory.dev                                 │  ← domain, 13px teal
+  │                                                  │
+  │  Official Address                                │  ← label, 11px gray
+  │  Gh7K...9xmP  [copy]                             │  ← truncated, monospace
+  │                                                  │
+  │  Valid until Aug 18, 2026                        │  ← from expiration_epoch
+  │  ─────────────────────────────────────           │
+  │  ✓ Safe to send · Verified by Armory Oracle      │  ← 12px, teal
+  └──────────────────────────────────────────────────┘
+  Left border: 3px solid #00A896 (teal)
+  Background: #0D1A12
+
+  UNVERIFIED result card:
+  Left border: 3px solid #F59E0B (amber)
+  Background: #1A1200
+  Shows: ⚠️ UNVERIFIED · "No registry record found"
+  Body: "We cannot confirm the owner of this address.
+         No merchant has claimed it. Proceed with caution."
+
+  LOADING state:
+  Shows: simple teal spinner + "Checking Armory registry..."
+
+DEMO WIDGET TECHNICAL IMPLEMENTATION:
+  This widget makes REAL calls to Solana devnet.
+  
+  Program ID: G8ZmDRtcCyvWCGRj41xoenQVQ7uRDEe1hVZzzqUYsgpX
+  RPC: https://api.devnet.solana.com
+  
+  Auto-detect input type:
+    If input contains "." → domain lookup
+      Compute sha256(domain) → findProgramAddress(
+        ["entity", sha256hash], programId)
+      Fetch account data → decode EntityRecord
+    
+    If input is 32-44 chars, no dot → address lookup
+      getProgramAccounts with memcmp filter:
+      { offset: 40, bytes: inputAddress }
+  
+  Use raw JSON-RPC fetch (no npm imports):
+  
+  async function queryArmory(input) {
+    const RPC = "https://api.devnet.solana.com";
+    const PROGRAM = 
+      "G8ZmDRtcCyvWCGRj41xoenQVQ7uRDEe1hVZzzqUYsgpX";
+    
+    if (input.includes(".")) {
+      // Domain lookup
+      const hash = await crypto.subtle.digest(
+        "SHA-256", 
+        new TextEncoder().encode(input)
+      );
+      const hashBytes = new Uint8Array(hash);
+      // Find PDA and fetch account
+      // ... (implement full PDA derivation)
+    } else {
+      // Address reverse lookup via getProgramAccounts
+      const response = await fetch(RPC, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          jsonrpc: "2.0", id: 1,
+          method: "getProgramAccounts",
+          params: [PROGRAM, {
+            encoding: "base64",
+            filters: [{
+              memcmp: { offset: 40, bytes: input }
+            }]
+          }]
+        })
+      });
+      const data = await response.json();
+      // Decode result
+    }
+  }
+  
+  Decode EntityRecord from base64 account data:
+    offset 0-7:   discriminator (skip)
+    offset 8-39:  domain_hash (skip)  
+    offset 40-71: official_pubkey (32 bytes)
+    offset 72:    verification_status (1 byte, 1=true)
+    offset 73-80: expiration_epoch (i64, 8 bytes, LE)
+    offset 81-88: registered_at (i64, 8 bytes, LE)
+    offset 89-97: verified_at Option<i64>
+    offset 98-129: verifier pubkey (32 bytes)
+    offset 130:   bump (1 byte)
+    offset 131-134: domain string length (u32, 4 bytes, LE)
+    offset 135+:  domain string bytes (UTF-8)
+    after domain: entity_name length (u32) + bytes
+
+── SECTION 4: PROBLEM → SOLUTION ───────────────────────
+
+Two columns on desktop, stacked on mobile.
+
+Left column — THE PROBLEM:
+  Label: "THE PROBLEM" (red, small, tracking-wider)
+  Heading: "Blind transfers cost millions every year"
+  
+  Body text:
+  "In Web2, PhonePe shows you 'Amazon India ✅' before 
+   you pay. In Web3, you copy-paste a 44-character string 
+   and hope it's right."
+  
+  Stat box (dark card, red left border):
+    "$83.8M+"
+    "confirmed losses from address poisoning attacks"
+    "270M attack attempts · 17M victims · CMU/USENIX 2025"
+
+Right column — THE SOLUTION:
+  Label: "THE SOLUTION" (teal, small, tracking-wider)
+  Heading: "Cryptographic proof before every transfer"
+  
+  Body text:
+  "Armory links Web2 domain ownership to Solana wallet 
+   addresses using DNS verification — the same trust 
+   model as HTTPS, but for payments."
+  
+  Three feature pills:
+    ✓ Sub-second verdict
+    ✓ DNS-anchored verification  
+    ✓ 90-day expiry enforcement
+
+── SECTION 5: HOW IT WORKS ─────────────────────────────
+
+Section heading: "How it works"
+Subheading: "Three steps. No tokens. No governance."
+
+Three cards in a row (stacked on mobile):
+
+Card 1 — REGISTER
+  Number: "01" (large, teal, 48px, bold)
+  Title: "Merchant registers"
+  Body: "Any business submits their domain and official 
+         wallet address. A registry entry is created 
+         on-chain — permissionless, anyone can register."
+  Icon: 📝
+
+Card 2 — VERIFY  
+  Number: "02" (large, teal)
+  Title: "DNS proof confirmed"
+  Body: "The merchant hosts a solana-wallet.json file at 
+         their .well-known path. The Armory oracle reads 
+         it, confirms the match, and flips the on-chain 
+         status to VERIFIED."
+  Icon: 🔍
+
+Card 3 — TRUST
+  Number: "03" (large, teal)
+  Title: "Anyone can query"
+  Body: "Wallets, dApps, and AI agents query the registry 
+         before sending. Green tick = safe to send. 
+         Warning = proceed with extreme caution."
+  Icon: ✅
+
+Below the three cards: a horizontal flow diagram
+(simple, text-based, no images needed):
+
+  [Merchant] → register_entity → [Unverified PDA]
+                                         ↓
+  [DNS Oracle] → verify_entity → [Verified PDA ✅]
+                                         ↓
+  [User/Agent] → query_entity → [Verdict: VERIFIED]
+
+── SECTION 6: FOR TWO AUDIENCES ────────────────────────
+
+Two side-by-side cards. Full width.
+
+Left card — FOR HUMANS:
+  Background: surface color
+  Teal top border
+  
+  Icon: 👤
+  Title: "For wallet users"
+  Subtitle: "Know before you send"
+  
+  Scenario box (darker background, monospace):
+    You're about to send 50 SOL to a merchant.
+    You paste their address.
+    
+    ✅ Amazon India Pvt. Ltd.
+       domain: amazon.in
+       Valid until Aug 2026
+    
+    Send with confidence.
+  
+  Feature list:
+    • Paste address or type domain
+    • Instant VERIFIED / UNVERIFIED verdict
+    • Works in any browser via Chrome extension
+    • No wallet connection needed to check
+
+Right card — FOR AI AGENTS:
+  Background: surface color  
+  Purple-ish top border (#7C3AED)
+  
+  Icon: 🤖
+  Title: "For AI agents"
+  Subtitle: "Programmatic safety before every CPI"
+  
+  Code block (dark, monospace):
+    // Before executing any payment CPI
+    const verdict = await queryArmory(destinationDomain);
+    
+    if (verdict.status !== "Verified") {
+      throw new Error("Destination unverified — aborting");
+    }
+    
+    // Safe to proceed with transfer
+    await executeTransfer(verdict.officialPubkey, amount);
+  
+  Feature list:
+    • Machine-readable Verdict struct
+    • CPI-callable from any Anchor program
+    • Expiry enforcement — no stale trust
+    • Integrates with Pay.sh · Circle Agent Stack
+
+── SECTION 7: TECHNICAL DETAILS ────────────────────────
+
+Section heading: "Built on solid foundations"
+
+Three columns:
+
+Column 1 — ON-CHAIN:
+  Title: "Anchor Program"
+  Items (with teal checkmarks):
+    ✓ Program ID: G8ZmD...gspX (monospace, copyable)
+    ✓ Deployed on Solana Devnet
+    ✓ Domain-seeded PDAs (sha256 hashing)
+    ✓ O(1) lookup by domain
+    ✓ Offset-40 reverse lookup by address
+    ✓ 90-day expiration enforcement
+    ✓ sRFC-35 standard compliant
+
+Column 2 — SECURITY:
+  Title: "Trust Model"
+  Items:
+    ✓ DNS .well-known verification
+    ✓ HTTPS as root of trust
+    ✓ Typosquatting protection
+    ✓ Oracle-signed verification
+    ✓ Immutable on-chain record
+    ✓ Permissionless registration
+    ✓ Trustless query (no API key)
+
+Column 3 — INTEGRATIONS:
+  Title: "Works With"
+  Partner logos / text badges:
+    Solana (sRFC-35)
+    Phantom Wallet
+    Anchor Framework
+    Pay.sh
+    Circle Agent Stack
+    Chrome Extension
+    ElizaOS
+
+── SECTION 8: FOOTER ───────────────────────────────────
+
+Dark background, centered.
+Two rows:
+
+Row 1 (links):
+  "Check Address" | "Register Domain" | 
+  "GitHub" | "Turbin3 Q2 2026"
+
+Row 2 (attribution):
+  🛡 ARMORY PROTOCOL
+  "The TLS handshake Web3 never had."
+  "Built by Armaan Saxena · Solana Devnet · 
+   Turbin3 Builders Cohort Q2 2026"
+
+═══════════════════════════════════════════════════════════
+TECHNICAL REQUIREMENTS
+═══════════════════════════════════════════════════════════
+
+Stack: Plain HTML + CSS + Vanilla JavaScript
+  ONE index.html file
+  ONE styles.css file  
+  ONE app.js file
+  No React, no npm, no build step
+  Must open by just double-clicking index.html
+  OR deploy directly to Replit as static site
+
+Why no framework: This is a marketing page.
+It must load instantly. No build complexity.
+
+The demo widget uses only:
+  - fetch() for JSON-RPC calls
+  - crypto.subtle for SHA-256
+  - Plain DOM manipulation
+  No external libraries whatsoever.
+
+Mobile responsive: all sections work at 375px.
+Use CSS Grid and Flexbox. No CSS frameworks.
+
+Performance: 
+  No external font imports
+  No external image dependencies
+  Total page weight under 50KB (excluding RPC calls)
+  Must score 95+ on Lighthouse performance
+
+═══════════════════════════════════════════════════════════
+COPY / TEXT GUIDELINES
+═══════════════════════════════════════════════════════════
+
+Voice: Technical, confident, direct. No hype words.
+  WRONG: "Revolutionary, game-changing, disrupting"
+  RIGHT: "Cryptographic, permissionless, sub-second"
+
+The PhonePe analogy is your strongest hook for Indian 
+users. Use it in the hero or problem section.
+
+Always mention the $83.8M stat with the source.
+Always mention sRFC-35 (Solana Foundation standard).
+Always mention Pay.sh and Circle Agent Stack (launched 
+May 2026 — positions Armory as timely infrastructure).
+
+Avoid:
+  - "Blockchain will change everything" type language
+  - Any mention of tokens or tokenomics
+  - Promises about mainnet (this is devnet)
+  - Overclaiming ("the only solution")
+
+═══════════════════════════════════════════════════════════
+WHAT TO AVOID
+═══════════════════════════════════════════════════════════
+
+❌ No React, Vue, or any framework
+❌ No npm install of any kind
+❌ No external CSS frameworks (no Tailwind, Bootstrap)
+❌ No stock photos or placeholder images
+❌ No animations except subtle CSS fade-in on scroll
+❌ No glassmorphism or blur effects
+❌ No hardcoded fake data in the demo —
+   the demo MUST make real devnet RPC calls
+❌ No "coming soon" sections
+❌ Do not invent features that don't exist
+   Only describe what's actually built and deployed
+
+═══════════════════════════════════════════════════════════
+
+Build all three files completely (index.html, styles.css, 
+app.js). Every section must be present. The demo widget 
+must make real Solana devnet calls. No placeholders.
