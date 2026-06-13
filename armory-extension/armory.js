@@ -1,5 +1,5 @@
 // ── Constants ──────────────────────────────────────────
-const ARMORY_PROGRAM_ID = "G8ZmDRtcCyvWCGRj41xoenQVQ7uRDEe1hVZzzqUYsgpX";
+const ARMORY_PROGRAM_ID = "VRPxpqkBTXgi1DaQ1t1yVyhD8PSCw6uBDrQx1zZznUk";
 
 // ── Base58 encode ──────────────────────────────────────
 function base58Encode(bytes) {

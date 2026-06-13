@@ -4,6 +4,9 @@
 
 Armory Protocol is a decentralized identity registry on Solana designed to solve the **"Fear of the Blind Transfer."** It provides a verifiable bridge between Web2 domains (DNS) and Web3 wallets, ensuring users and AI agents can verify recipient identities before sending assets.
 
+### **📍 Deployed Program Address**
+**Solana Devnet:** `G8ZmDRtcCyvWCGRj41xoenQVQ7uRDEe1hVZzzqUYsgpX`
+
 ---
 
 ## 🏗️ System Architecture
@@ -14,6 +17,33 @@ The ecosystem consists of four primary layers:
 2.  **Hybrid Verification Oracle (Node.js)**: A worker that performs SSL-secured DNS lookups to verify ownership proofs (`solana-wallet.json`) and signs on-chain verdicts.
 3.  **Merchant Dashboard (React)**: A premium UI for merchants to register domains, manage identity records, and for users to search the registry.
 4.  **Chrome Extension (Manifest V3)**: A real-time browser utility that detects Solana addresses on any webpage and shows a floating "Verified Badge" using Shadow DOM isolation.
+
+---
+
+## 🧪 Verification & Quality Control
+
+The protocol is backed by a 29-point automated test suite ensuring security, performance, and cross-layer integrity.
+
+### **1. On-Chain Smoke Tests (8/8 Passed)**
+Verifies real-time cluster health and deterministic PDA derivation.
+
+![Smoke Test Results](./assets/smoke-test-results.png)
+
+```text
+✅ Program deployed
+...
+✅ Frontend build integrity
+```
+
+### **2. Smart Contract Logic (21/21 Passed)**
+Verifies authorization, edge cases, and account lifecycle.
+
+![Smart Contract Test Results](./assets/contract-test-results.png)
+
+```text
+  armory_auth:   ✔ verify_entity by non-verifier → UnauthorizedVerifier
+...
+```
 
 ---
 

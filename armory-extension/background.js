@@ -1,6 +1,6 @@
 // Armory Protocol background service worker (Hardened + Cached)
 
-const ARMORY_PROGRAM_ID = "G8ZmDRtcCyvWCGRj41xoenQVQ7uRDEe1hVZzzqUYsgpX";
+const ARMORY_PROGRAM_ID = "VRPxpqkBTXgi1DaQ1t1yVyhD8PSCw6uBDrQx1zZznUk";
 const ARMORY_RPC = "https://api.devnet.solana.com";
 
 // ── Simple Cache (TTL: 5 minutes) ─────────────────────
