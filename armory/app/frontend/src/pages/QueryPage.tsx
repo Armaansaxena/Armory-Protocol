@@ -170,7 +170,35 @@ const QueryPage: React.FC = () => {
               filters: [{ memcmp: { offset: 40, bytes: searchPubkey.toBase58() } }],
             });
             if (accounts.length > 0) {
-              entityRecord = program.coder.accounts.decode("EntityRecord", accounts[0].account.data);
+              const data = accounts[0].account.data;
+              
+              // MANUAL HARDENED DECODER (Matches armory.js logic)
+              const verificationStatus = data[72] === 1;
+              const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
+              const expiryLow = view.getUint32(73, true);
+              const expiryHigh = view.getInt32(77, true);
+              const expirationEpoch = new anchor.BN(expiryHigh * 0x100000000 + expiryLow);
+
+              const verifiedAtTag = data[89];
+              const verifierOffset = (verifiedAtTag === 1) ? 98 : 90;
+              
+              const domainLenOffset = verifierOffset + 33;
+              const domainLen = view.getUint32(domainLenOffset, true);
+              const domainStart = domainLenOffset + 4;
+              const domainStr = new TextDecoder().decode(data.slice(domainStart, domainStart + domainLen));
+              
+              const nameLenOffset = domainStart + domainLen;
+              const nameLen = view.getUint32(nameLenOffset, true);
+              const nameStart = nameLenOffset + 4;
+              const entityNameStr = new TextDecoder().decode(data.slice(nameStart, nameStart + nameLen));
+
+              entityRecord = {
+                entityName: entityNameStr,
+                domain: domainStr,
+                officialPubkey: searchPubkey,
+                verificationStatus: verificationStatus,
+                expirationEpoch: expirationEpoch
+              };
             }
           } catch (gpaError) {
             console.error("Failed getProgramAccounts filtering:", gpaError);
@@ -275,8 +303,8 @@ const QueryPage: React.FC = () => {
                   <div style={{ borderTop: '1px solid #1A1F26', paddingTop: '20px' }}>
                     <div style={{ color: '#8B949E', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', marginBottom: '8px' }}>Official Wallet</div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <code style={{ fontSize: '15px', color: '#FFFFFF', fontWeight: 600 }}>{truncateAddress(result.data.officialPubkey.toBase58())}</code>
-                      <button onClick={(e) => handleCopy(result.data.officialPubkey.toBase58(), e)} style={{ background: '#161B22', border: '1px solid #30363D', color: '#8B949E', padding: '4px 10px', borderRadius: '6px', fontSize: '11px', cursor: 'pointer' }}>Copy</button>
+                      <code style={{ fontSize: '15px', color: '#FFFFFF', fontWeight: 600 }}>{truncateAddress(result.data.officialPubkey.toBase58 ? result.data.officialPubkey.toBase58() : result.data.officialPubkey)}</code>
+                      <button onClick={(e) => handleCopy(result.data.officialPubkey.toBase58 ? result.data.officialPubkey.toBase58() : result.data.officialPubkey, e)} style={{ background: '#161B22', border: '1px solid #30363D', color: '#8B949E', padding: '4px 10px', borderRadius: '6px', fontSize: '11px', cursor: 'pointer' }}>Copy</button>
                     </div>
                   </div>
                   <div style={{ borderTop: '1px solid #1A1F26', paddingTop: '20px' }}>
@@ -285,7 +313,7 @@ const QueryPage: React.FC = () => {
                   </div>
                 </div>
                 <div style={{ marginTop: '40px', display: 'flex', gap: '12px' }}>
-                  <a href={`https://explorer.solana.com/address/${result.data.officialPubkey.toBase58()}?cluster=devnet`} target="_blank" rel="noreferrer" style={{ background: '#FFFFFF', color: '#05080F', padding: '12px 24px', borderRadius: '10px', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>View on Solana Explorer</a>
+                  <a href={`https://explorer.solana.com/address/${result.data.officialPubkey.toBase58 ? result.data.officialPubkey.toBase58() : result.data.officialPubkey}?cluster=devnet`} target="_blank" rel="noreferrer" style={{ background: '#FFFFFF', color: '#05080F', padding: '12px 24px', borderRadius: '10px', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>View on Solana Explorer</a>
                 </div>
               </div>
             ) : (

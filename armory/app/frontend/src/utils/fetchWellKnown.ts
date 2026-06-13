@@ -21,6 +21,18 @@ export async function fetchWellKnown(
   const targetUrl = 
     `https://${domain}/.well-known/solana-wallet.json`;
   
+  // 1. Try DIRECT fetch first (best for Vercel with CORS headers)
+  try {
+    const directResponse = await fetch(targetUrl);
+    if (directResponse.ok) {
+        const data = await directResponse.json();
+        return validateData(data, -1); // -1 indicates direct fetch
+    }
+  } catch(e) {
+    // Direct failed (expected if CORS missing), proceed to proxies
+  }
+
+  // 2. Proxy Waterfall (Fallback)
   for (let i = 0; i < PROXIES.length; i++) {
     try {
       const proxyUrl = PROXIES[i](targetUrl);

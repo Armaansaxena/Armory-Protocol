@@ -180,14 +180,19 @@ const RegisterPage: React.FC = () => {
                   <button onClick={checkFile} disabled={isCheckingFile} style={{ flex: 1, padding: '14px', background: '#1A1F26', border: '1px solid #30363D', color: '#FFFFFF', borderRadius: '10px', fontWeight: 600, cursor: 'pointer' }}>{isCheckingFile ? 'Scanning DNS...' : 'Verify My File'}</button>
                   <button onClick={() => { setSkipFileCheck(true); setStep(3); }} style={{ flex: 1, padding: '14px', background: 'transparent', border: '1px solid transparent', color: '#484F58', borderRadius: '10px', fontSize: '13px', cursor: 'pointer' }}>Skip for now</button>
                 </div>
-                {fileVerified && <div style={{ color: '#00A896', fontWeight: 600, textAlign: 'center' }}>✅ Proof file detected successfully!</div>}
+                {fileVerified && <div style={{ color: '#00A896', fontWeight: 600, textAlign: 'center', background: 'rgba(0,168,150,0.1)', padding: '10px', borderRadius: '8px' }}>✅ Proof file detected successfully!</div>}
                 {fileError && (
                   <div style={{ padding: '16px', background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.2)', borderRadius: '12px', fontSize: '12px', textAlign: 'center' }}>
                     <div style={{ color: '#F59E0B', fontWeight: 700, marginBottom: '4px' }}>BROWSER LIMITATION</div>
-                    <div style={{ color: '#8B949E' }}>CORS security may be blocking direct access from the browser. The <strong>Armory Oracle</strong> will still be able to verify your domain in the next step.</div>
+                    <div style={{ color: '#8B949E' }}>CORS security may be blocking direct access. The <strong>Armory Oracle</strong> will still be able to verify your domain in the next step.</div>
                   </div>
                 )}
-                <button disabled={!fileVerified && !skipFileCheck} onClick={() => setStep(3)} style={{ padding: '16px', background: '#00A896', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: 700, cursor: 'pointer' }}>Next: Complete Registration</button>
+                <button 
+                    onClick={() => setStep(3)} 
+                    style={{ padding: '16px', background: '#00A896', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: 700, cursor: 'pointer' }}
+                >
+                    {fileVerified ? "Next: Register On-Chain" : "Complete Registration Anyway"}
+                </button>
               </div>
             )}
             {step === 3 && (
