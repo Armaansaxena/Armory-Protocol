@@ -5,7 +5,7 @@
 Armory Protocol is a decentralized identity registry on Solana designed to solve the **"Fear of the Blind Transfer."** It provides a verifiable bridge between Web2 domains (DNS) and Web3 wallets, ensuring users and AI agents can verify recipient identities before sending assets.
 
 ### **📍 Deployed Program Address**
-**Solana Devnet:** `G8ZmDRtcCyvWCGRj41xoenQVQ7uRDEe1hVZzzqUYsgpX`
+**Solana Devnet:** `VRPxpqkBTXgi1DaQ1t1yVyhD8PSCw6uBDrQx1zZznUk`
 
 ---
 
