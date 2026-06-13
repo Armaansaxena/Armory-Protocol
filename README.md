@@ -84,7 +84,7 @@ npm start
 1. Open `chrome://extensions/`
 2. Enable **Developer Mode**.
 3. Click **Load Unpacked** and select the `armory-extension/` folder.
-4. Paste a verified address (e.g., from `demo.armory.dev`) into any text field to see the badge.
+4. Paste a verified address (e.g., `2HCZ6n3EwLideTMe1nkZXDqpRfoPmXZRSfoszTDSbnwu`) into any text field to see the badge.
 
 ---
 

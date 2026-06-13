@@ -107,7 +107,7 @@ const WalletMockupPage: React.FC = () => {
         <div style={{ marginTop: '32px', padding: '16px', background: '#0D1117', borderLeft: '4px solid #00A896', borderRadius: '8px' }}>
           <p style={{ color: '#FFF', fontSize: '14px', marginBottom: '8px' }}><strong>Try this:</strong></p>
           <code style={{ color: '#00A896', display: 'block', wordBreak: 'break-all', fontSize: '12px' }}>
-            88fS66N9y6p3Hh9pT6H2V2R6T6H2V2R6T6H2V2R6
+            2HCZ6n3EwLideTMe1nkZXDqpRfoPmXZRSfoszTDSbnwu
           </code>
           <p style={{ color: '#666', fontSize: '12px', marginTop: '8px' }}>
             (Paste the demo address above into the wallet's recipient field)
