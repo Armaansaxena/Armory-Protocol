@@ -13,7 +13,7 @@ Armory Protocol is a decentralized identity verification layer for the Agentic W
 - **`scripts/initialize-devnet.ts`**: Handles on-chain `RegistryConfig` setup with "Already-Exists" protection.
 - **`scripts/seed-devnet.ts`**: Pre-populates the registry with verified demo entities (`demo.armory.dev`, etc.).
 - **`scripts/verify-deployment.ts`**: Generates a cryptographic state report proving devnet readiness.
-- **`scripts/smoke-test.ts`**: **The Quality Gate.** Runs 8 automated checks including program existence, PDA validity, reverse-lookup performance, and frontend build integrity. **Status: 8/8 PASSED.**
+- **`scripts/smoke-test.ts`**: **The Quality Gate.** Runs 8 automated checks including program existence (ID: `VRPxpqkBTXgi1DaQ1t1yVyhD8PSCw6uBDrQx1zZznUk`), PDA validity, reverse-lookup performance, and frontend build integrity. **Status: 8/8 PASSED.**
 
 ### B. Frontend Engineering (Strict Typing)
 - **`app/frontend/src/idl/`**: Direct import of Anchor IDL and Types. **Zero "as any" casts remain.**

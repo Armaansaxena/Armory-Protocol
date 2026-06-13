@@ -90,6 +90,7 @@ npm start
 
 ## 🛠️ Performance & Security
 - **Surgical Indexing**: The `official_pubkey` is stored at exactly **byte offset 40**, allowing ultra-fast reverse lookups via `getProgramAccounts` filters without an external indexer.
+- **Waterfall Search Engine**: Implements a multi-layered fallback search (Deterministic PDA -> Memcmp Filter -> DexScreener API) to identify ecosystem tokens (like USDC) and liquidity pools even if they aren't in the Armory registry.
 - **Shadow DOM**: The extension UI is isolated from host page styles to prevent flickering or CSS injection.
 - **Background Caching**: Extension lookups are cached for 5 minutes to bypass RPC latency.
 - **sRFC-35 Alignment**: Follows emerging standards for Web3 domain verification.
