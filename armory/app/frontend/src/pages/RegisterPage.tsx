@@ -75,8 +75,10 @@ const RegisterPage: React.FC = () => {
       const provider = new anchor.AnchorProvider(connection, wallet as any, { preflightCommitment: "confirmed" });
       const program = new Program(IDL, provider) as Program<ArmoryProtocol>;
       
-      const domainHashStr = anchor.utils.sha256.hash(domain.toLowerCase().trim());
-      const domainHash = Buffer.from(domainHashStr, 'hex');
+      // Native Web Crypto SHA-256 (matches QueryPage and Smart Contract)
+      const msgBuffer = new TextEncoder().encode(domain.toLowerCase().trim());
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const domainHash = Buffer.from(new Uint8Array(hashBuffer));
       
       const [entityPda] = PublicKey.findProgramAddressSync([Buffer.from("entity"), domainHash], PROGRAM_ID);
       const [configPda] = PublicKey.findProgramAddressSync([Buffer.from("config")], PROGRAM_ID);
