@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Update launch app URL based on storage
   chrome.storage.local.get(["appUrl"], (result) => {
-    const appUrl = result.appUrl || "http://localhost:3000";
+    const appUrl = result.appUrl || "https://armory-protocol.vercel.app";
     document.getElementById("launch-app").href = appUrl;
   });
 });

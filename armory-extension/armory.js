@@ -11,7 +11,7 @@ function base64ToUint8(base64) {
   return bytes;
 }
 
-// ── Decode EntityRecord (Fully Dynamic) ────────────────
+// ── Decode EntityRecord (Fully Dynamic Master) ─────────
 function decodeEntityRecord(base64Data) {
   try {
     const bytes = base64ToUint8(base64Data);
@@ -26,13 +26,10 @@ function decodeEntityRecord(base64Data) {
     const expirationEpoch = expiryHigh * 0x100000000 + expiryLow;
     
     // 3. Handle Option<i64> verified_at at offset 89
-    // Anchor/Borsh Option: 0 = None, 1 = Some + 8 bytes
     const verifiedAtTag = bytes[89];
-    // If tag is 1, data is 8 bytes. If tag is 0, data is 0 bytes.
     const verifierOffset = (verifiedAtTag === 1) ? 98 : 90;
     
-    // 4. Verifier (32 bytes) + Bump (1 byte)
-    // Domain length starts after them
+    // 4. Verifier (32 bytes) + Bump (1 byte) -> Domain length starts at verifierOffset + 33
     const domainLenOffset = verifierOffset + 33;
     const domainLen = dataView.getUint32(domainLenOffset, true);
     
@@ -47,17 +44,42 @@ function decodeEntityRecord(base64Data) {
     const entityName = new TextDecoder().decode(bytes.slice(nameStart, nameStart + nameLen));
     
     const now = Math.floor(Date.now() / 1000);
-    // Even if verificationStatus is true, check expiry
     const isVerified = verificationStatus && (expirationEpoch > now || expirationEpoch === 0);
     
     return { 
       status: isVerified ? "Verified" : "Unverified", 
       domain, 
       entityName,
-      address: "" // placeholder
+      expirationEpoch
     };
   } catch (e) {
     console.error("Armory Decoder Error:", e);
     return { status: "Unverified" };
   }
+}
+
+// ── Unified Query Helper (Restored for Popup + Content) ─
+async function armoryQueryByAddress(address) {
+    try {
+        const response = await chrome.runtime.sendMessage({ 
+            type: "ARMORY_QUERY_ADDRESS", 
+            address 
+        });
+
+        if (response && response.success) {
+            if (response.isDex) {
+                return { 
+                    status: "Verified", 
+                    entityName: response.entityName, 
+                    domain: response.domain 
+                };
+            } else {
+                return decodeEntityRecord(response.accountData);
+            }
+        }
+        return { status: "Unverified" };
+    } catch (e) {
+        console.error("Armory Query Error:", e);
+        throw e;
+    }
 }

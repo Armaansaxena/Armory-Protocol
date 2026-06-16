@@ -78,7 +78,7 @@ cd armory/app/frontend
 npm install
 npm start
 ```
-*Accessible at `http://localhost:3000`*
+*Accessible at `https://armory-protocol.vercel.app`*
 
 ### 3. Chrome Extension
 1. Open `chrome://extensions/`

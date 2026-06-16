@@ -13,7 +13,7 @@
 1. Open any website (even Google.com)
 2. Open the browser console or any text input
 3. Paste one of these verified addresses:
-   - Go to your Armory app (localhost:3000)
+   - Go to your Armory app (armory-protocol.vercel.app)
    - Search "demo.armory.dev" 
    - Copy the wallet address shown
    - Paste it anywhere on any webpage

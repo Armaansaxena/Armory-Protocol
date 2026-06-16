@@ -82,20 +82,11 @@ async function runQuery(address) {
   updateUI({ status: "loading", address });
 
   try {
-    const res = await chrome.runtime.sendMessage({ type: "ARMORY_QUERY_ADDRESS", address });
+    const res = await armoryQueryByAddress(address);
     if (address !== currentAddress) return;
-
-    if (res.success) {
-      if (res.isDex) {
-          updateUI({ status: "Verified", entityName: res.entityName, domain: res.domain, address });
-      } else {
-          const decoded = decodeEntityRecord(res.accountData);
-          updateUI({ ...decoded, address });
-      }
-    } else {
-      updateUI({ status: "Unverified", address });
-    }
+    updateUI({ ...res, address });
   } catch (e) {
+    console.error("Armory Extension: RunQuery Error", e);
     currentAddress = null;
   }
 }
