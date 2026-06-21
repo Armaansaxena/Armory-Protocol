@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
@@ -115,6 +115,22 @@ const AppContent = () => {
 const App = () => {
   const endpoint = process.env.REACT_APP_RPC_URL || "https://api.devnet.solana.com";
   const wallets = useMemo(() => [new PhantomWalletAdapter(), new SolflareWalletAdapter()], []);
+
+  // 🛡️ Dynamically inject/force the Armory favicon into the browser document head
+  useEffect(() => {
+    let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.head.appendChild(link);
+    }
+    // Make sure your icon or image asset is named favicon.ico inside your public/ folder
+    link.href = '/favicon.ico'; 
+    link.type = 'image/x-icon';
+    
+    // Also update the document Title tab name while we are here!
+    document.title = "Armory Protocol | Identity Oracle";
+  }, []);
 
   return (
     <ConnectionProvider endpoint={endpoint}>
